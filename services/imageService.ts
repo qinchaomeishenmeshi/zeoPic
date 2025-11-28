@@ -16,29 +16,10 @@ export const generatePicsumUrl = (width: number, height: number): string => {
  * This bypasses some cross-origin download restrictions on straight <a> tags.
  * @param url The URL of the image to download
  */
-export const fetchImageBlob = async (url: string): Promise<void> => {
-  try {
-    const response = await fetch(url);
-    if (!response.ok) throw new Error('Network response was not ok');
-    
-    const blob = await response.blob();
-    const objectUrl = window.URL.createObjectURL(blob);
-    
-    const link = document.createElement('a');
-    link.href = objectUrl;
-    
-    // Generate a nice filename with timestamp
-    const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
-    link.download = `zenpic-${timestamp}.jpg`;
-    
-    document.body.appendChild(link);
-    link.click();
-    
-    // Cleanup
-    document.body.removeChild(link);
-    window.URL.revokeObjectURL(objectUrl);
-  } catch (error) {
-    console.error('Error downloading the image:', error);
-    throw error;
+export const fetchImageBlob = async (url: string): Promise<Blob> => {
+  const response = await fetch(url);
+  if (!response.ok) {
+    throw new Error('Network response was not ok');
   }
+  return response.blob();
 };

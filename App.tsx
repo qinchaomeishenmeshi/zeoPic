@@ -1,13 +1,14 @@
 import React, { useState, useCallback } from 'react';
 import { ImageViewer } from './components/ImageViewer';
 import { RefreshCw } from 'lucide-react';
+import { useThrottle } from './hooks/useThrottle';
 
-const App: React.FC = () => {
+const App = () => {
   const [refreshKey, setRefreshKey] = useState<number>(0);
 
-  const handleRefresh = useCallback(() => {
+  const throttledRefresh = useThrottle(() => {
     setRefreshKey(prev => prev + 1);
-  }, []);
+  }, 1000); // 1-second throttle
 
   return (
     <div className="min-h-screen w-full flex flex-col items-center justify-center bg-slate-50 text-slate-900 relative overflow-hidden font-sans">
@@ -18,7 +19,7 @@ const App: React.FC = () => {
           ZenPic
         </h1>
         <button 
-          onClick={handleRefresh}
+          onClick={throttledRefresh}
           className="pointer-events-auto p-3 bg-white/80 backdrop-blur-md rounded-full shadow-sm hover:shadow-md transition-all duration-300 hover:rotate-180 active:scale-95 group border border-slate-200"
           aria-label="Refresh Image"
         >
@@ -28,7 +29,7 @@ const App: React.FC = () => {
 
       {/* Main Content Area */}
       <main className="flex-1 w-full max-w-5xl flex items-center justify-center p-4 sm:p-8">
-        <ImageViewer key={refreshKey} />
+        <ImageViewer refreshKey={refreshKey} />
       </main>
 
       {/* Footer */}
