@@ -1,0 +1,5 @@
+{
+  "name": "ZenPic",
+  "description": "A minimalist random image generator based on Picsum Photos. Designed for simplicity and focus.",
+  "requestFramePermissions": []
+}
